@@ -32,7 +32,7 @@ def single_team(df):
         return row
 
 
-# players = players.groupby(["Player", "Year"]).apply(single_team)
+#players = players.groupby(["Player", "Year"]).apply(single_team)
 
 # Combines mvps and players dbs that match player and year cols
 combined = players.merge(mvps, how="outer", on=["Player", "Year"])

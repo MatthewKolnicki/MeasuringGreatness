@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 plt.rc("font", size=14)
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import Ridge
 from sklearn.model_selection import train_test_split
 
 
@@ -24,7 +24,18 @@ predictors = ['Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
        'PA/G', 'SRS']
 
 training = mvp_stats[mvp_stats["Year"] < 2021]
+testing = mvp_stats[mvp_stats["Year"] == 2021]
 
+ridge = Ridge(alpha=0.1)
+
+ridge.fit(training[predictors], training["Share"])
+predictions = ridge.predict(testing[predictors])
+
+predictions = pd.DataFrame(predictions, columns=["predictions"], index=testing.index)
+
+compare = pd.concat([testing[["Player", "Share"]], predictions], axis=1)
+sorted_comp = compare.sort_values("predictions", ascending=False).head(10)
+print (sorted_comp)
 
 if __name__ == '__main__':
     pass
