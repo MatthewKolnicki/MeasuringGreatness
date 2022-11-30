@@ -1,13 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.rc("font", size=14)
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import ElasticNet
-
-from sklearn.model_selection import train_test_split
+plt.rc("font", size=14)
 
 mvp_stats = pd.read_csv("player_mvp_stats.csv")
 mvp_stats = mvp_stats.fillna(0)
