@@ -22,8 +22,8 @@ predictors = ['Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
               'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'Year', 'W', 'L', 'W/L%', 'GB', 'PS/G',
               'PA/G', 'SRS']
 
-training = mvp_stats[mvp_stats["Year"] < 2021]
-testing = mvp_stats[mvp_stats["Year"] == 2021]
+training = mvp_stats[mvp_stats["Year"] < 2011]
+testing = mvp_stats[mvp_stats["Year"] == 2011]
 
 
 def regression(model):
@@ -88,6 +88,7 @@ def compound_years_test(model, year, predictions):
         average_accuracy.append(accuracy(compare))
         top5_compound = (sum(average_accuracy) / len(average_accuracy)) * 100
     print("Accuracy of top 5 voted players compounded", top5_compound, "%")
+    print(pd.concat([pd.Series(model.coef_), pd.Series(predictors)], axis=1).sort_values(0, ascending=False))
 
 
 def mvp_check(model, year, predictions):
@@ -112,6 +113,7 @@ if __name__ == '__main__':
     lin = LinearRegression()
     elas = ElasticNet(alpha=.1)
     sgd = SGDRegressor(alpha=.1)
+
 
     years = list(range(1991, 2022))
     # First 5 years are training first test set (1996), next is 6, then 7, ect.
