@@ -77,6 +77,7 @@ def accuracy_mvp(sorted_comp):
 def compound_years_test(model, year, predictions):
     average_accuracy = []
     compound_prediction = []
+    year_by_year = []
     for year in years[5:]:
         training = mvp_stats[mvp_stats["Year"] < year]
         testing = mvp_stats[mvp_stats["Year"] == year]
@@ -86,14 +87,19 @@ def compound_years_test(model, year, predictions):
         compare = pd.concat([testing[["Player", "Share"]], predictions], axis=1)
         compound_prediction.append(compare)
         average_accuracy.append(accuracy(compare))
+        year_by_year.append(accuracy(compare))
+        year_by_year = [float(('%.4f' % float(elem)).strip("0")) for elem in year_by_year]
         top5_compound = (sum(average_accuracy) / len(average_accuracy)) * 100
-    print("Accuracy of top 5 voted players compounded", top5_compound, "%")
-    print(pd.concat([pd.Series(model.coef_), pd.Series(predictors)], axis=1).sort_values(0, ascending=False))
+    print("Top 5 accuracy by year =", year_by_year)
+    print("Accuracy of top 5 voted players compounded", '%.2f' % top5_compound, "%")
+    #print(pd.concat([pd.Series(model.coef_), pd.Series(predictors)], axis=1).sort_values(0, ascending=False))
 
 
 def mvp_check(model, year, predictions):
     average_accuracy = []
     compound_prediction = []
+    year_by_year = []
+    years_list = []
     for year in years[5:]:
         training = mvp_stats[mvp_stats["Year"] < year]
         testing = mvp_stats[mvp_stats["Year"] == year]
@@ -103,8 +109,12 @@ def mvp_check(model, year, predictions):
         compare = pd.concat([testing[["Player", "Share"]], predictions], axis=1)
         compound_prediction.append(compare)
         average_accuracy.append(accuracy_mvp(compare))
+        years_list.append(year)
+        year_by_year.append(accuracy_mvp(compare))
         mvp_compound = (sum(average_accuracy) / len(average_accuracy)) * 100
-    print("MVP predicted accuracy per year", mvp_compound, "%")
+    print("Years in order =", years_list)
+    print("MVP hit or miss by year =", year_by_year)
+    print("MVP predicted accuracy per year", '%.4f' % mvp_compound, "%")
 
 
 if __name__ == '__main__':
