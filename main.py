@@ -33,15 +33,6 @@ def regression(model):
 
     predictions = pd.DataFrame(predictions, columns=["predictions"], index=testing.index)
     return predictions
-    # compare = pd.concat([testing[["Player", "Share"]], predictions], axis=1)
-    # sorted_comp = compare.sort_values("predictions", ascending=False)
-
-    # error = mean_squared_error(sorted_comp["Share"], sorted_comp["predictions"])
-    # sorted_comp = sorted_comp.sort_values("Share", ascending=False)
-    # sorted_comp["Rk"] = list(range(1, sorted_comp.shape[0] + 1))
-
-    # sorted_comp = sorted_comp.sort_values("predictions", ascending=False)
-    # sorted_comp["Predicted Rk"] = list(range(1, sorted_comp.shape[0] + 1))
 
 
 def top5_compared(predictions):
@@ -113,20 +104,20 @@ if __name__ == '__main__':
     lin = LinearRegression()
     elas = ElasticNet(alpha=.1)
     sgd = SGDRegressor(alpha=.1)
-    rf = RandomForestRegressor(n_estimators=100, random_state=1, min_samples_split=10)
+    rf = RandomForestRegressor(n_estimators=50, random_state=1, min_samples_split=5)
 
     years = list(range(1991, 2022))
     # First 5 years are training first test set (1996), next is 6, then 7, ect.
 
     print("Ridge")
-    compound_years_test(ridge, years[5:], regression(ridge))
+    #compound_years_test(ridge, years[5:], regression(ridge))
     print("\nLasso")
-    compound_years_test(las, years[5:], regression(las))
+    #compound_years_test(las, years[5:], regression(las))
     print("\nLinear")
-    compound_years_test(lin, years[5:], regression(lin))
+    #compound_years_test(lin, years[5:], regression(lin))
     print("\nElastic Net")
-    compound_years_test(elas, years[5:], regression(elas))
+    #compound_years_test(elas, years[5:], regression(elas))
     print("\nSGD")
-    compound_years_test(sgd, years[5:], regression(sgd))
+    #compound_years_test(sgd, years[5:], regression(sgd))
     print("\nRandom Forest")
-    compound_years_test(sgd, years[5:], regression(sgd))
+    compound_years_test(rf, years[5:], regression(rf))
