@@ -112,7 +112,7 @@ def compound_years_test(model, year, predictions):
     plt.xlabel("Years")
     plt.ylabel("Accuracy of Top 5 MVP Prediction")
     plt.title(str_model + ": Top 5 MVP Prediction")
-    # plt.savefig(figure_num, ("DataFiles/" + str_model + "_TOP5.png"))
+    plt.savefig(("Results/" + str_model + "_TOP5.png"))
 
     figure_num = figure_num + 1
 
@@ -122,7 +122,7 @@ def compound_years_test(model, year, predictions):
     plt.xlabel("Years")
     plt.ylabel("Accuracy MVP Prediction")
     plt.title(str_model + ": MVP Prediction")
-    # plt.savefig(figure_num, ("DataFiles/" + str_model + "_MVP.png"))
+    plt.savefig(("Results/" + str_model + "_MVP.png"))
 
     figure_num = figure_num + 1
 
@@ -151,9 +151,8 @@ if __name__ == '__main__':
                                               compound_years_test(sgd, years[5:], regression(sgd)),
                                               compound_years_test(rf, years[5:], regression(rf))],
             }
-    plt.show()
-
 
 
     df = pd.DataFrame(data)
     print((tabulate(df, headers='keys', tablefmt='psql')))
+    plt.show()
