@@ -8,6 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import ElasticNet
 from sklearn.linear_model import SGDRegressor
 from sklearn.ensemble import RandomForestRegressor
+
 plt.style.use('seaborn')
 
 mvp_stats = pd.read_csv("player_mvp_stats.csv")
@@ -26,8 +27,6 @@ predictors = ['Age', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P',
               'PA/G', 'SRS']
 training = mvp_stats[mvp_stats["Year"] < 2011]
 testing = mvp_stats[mvp_stats["Year"] == 2011]
-
-
 
 
 def regression(model):
@@ -92,11 +91,16 @@ def compound_years_test(model, year, predictions):
         mvp_compound = (sum(average_accuracy_mvp) / len(average_accuracy_mvp)) * 100
         year_by_year = [float(('%.3f' % float(elem)).strip("0")) for elem in year_by_year]
         top5_compound = (sum(average_accuracy) / len(average_accuracy)) * 100
-        print(str(model) + " for " + str(year) + " running...")
-    #print("Years in order =", years_list)
-    #print("MVP hit or miss by year =", year_by_year_mvp)
-    #print("MVP predicted accuracy per year", '%.4f' % mvp_compound, "%")
-    #print("Top 5 accuracy by year =", year_by_year)
+        str_model = str(model)
+        sep = str_model.split("(", 1)
+        str_model = sep[0]
+        print("Running " + str_model + " for year " + str(year) + ", Top 5 Accuracy = "
+              + '%.3f' % (accuracy(compare) * 100) + "%"
+              + ", MVP Accuracy = " + str(accuracy_mvp(compare) * 100) + "%")
+    # print("Years in order =", years_list)
+    # print("MVP hit or miss by year =", year_by_year_mvp)
+    # print("MVP predicted accuracy per year", '%.4f' % mvp_compound, "%")
+    # print("Top 5 accuracy by year =", year_by_year)
 
     str_model = str(model)
     sep = str_model.split("(", 1)
@@ -104,29 +108,28 @@ def compound_years_test(model, year, predictions):
     global figure_num
     plt.figure(figure_num)
     plt.scatter(years[5:], year_by_year, c='blue', edgecolors='black', linewidths=1, alpha=0.7)
-    #plt.xticks(years[5:])
+    # plt.xticks(years[5:])
     plt.xlabel("Years")
     plt.ylabel("Accuracy of Top 5 MVP Prediction")
     plt.title(str_model + ": Top 5 MVP Prediction")
-    plt.savefig("DataFiles/" + str(model) + ".png")
+    # plt.savefig(figure_num, ("DataFiles/" + str_model + "_TOP5.png"))
 
     figure_num = figure_num + 1
 
     plt.figure(figure_num)
     plt.scatter(years[5:], year_by_year_mvp, c='red', edgecolors='black', linewidths=1, alpha=0.7)
-    #plt.xticks(years[5:])
+    # plt.xticks(years[5:])
     plt.xlabel("Years")
     plt.ylabel("Accuracy MVP Prediction")
     plt.title(str_model + ": MVP Prediction")
-    plt.savefig("DataFiles/" + str(model) + "_MVP.png")
+    # plt.savefig(figure_num, ("DataFiles/" + str_model + "_MVP.png"))
 
     figure_num = figure_num + 1
 
-    return'%.3f' % top5_compound + "%        |    " + '%.3f' % mvp_compound + "%"
+    return '%.3f' % top5_compound + "%        |    " + '%.3f' % mvp_compound + "%"
 
-    #return year_by_year
-    #print(pd.concat([pd.Series(model.coef_), pd.Series(predictors)], axis=1).sort_values(0, ascending=False))
-
+    # return year_by_year
+    # print(pd.concat([pd.Series(model.coef_), pd.Series(predictors)], axis=1).sort_values(0, ascending=False))
 
 
 if __name__ == '__main__':
@@ -140,15 +143,17 @@ if __name__ == '__main__':
     years = list(range(1991, 2022))
     # First 5 years are training first test set (1996), next is 6, then 7, ect.
 
-
     data = {'Model': ['Ridge', 'Lasso', 'Linear', 'Elastic Net', 'SGD', 'Random Forest'],
             'Top 5 Accuracy | MVP Accuracy': [y := compound_years_test(ridge, years[5:], regression(ridge)),
-                               h := compound_years_test(las, years[5:], regression(las)),
-                               compound_years_test(lin, years[5:], regression(lin)),
-                               compound_years_test(elas, years[5:], regression(elas)),
-                               compound_years_test(sgd, years[5:], regression(sgd)),
-                               compound_years_test(rf, years[5:], regression(rf))],
+                                              h := compound_years_test(las, years[5:], regression(las)),
+                                              compound_years_test(lin, years[5:], regression(lin)),
+                                              compound_years_test(elas, years[5:], regression(elas)),
+                                              compound_years_test(sgd, years[5:], regression(sgd)),
+                                              compound_years_test(rf, years[5:], regression(rf))],
             }
     plt.show()
+
+
+
     df = pd.DataFrame(data)
     print((tabulate(df, headers='keys', tablefmt='psql')))
