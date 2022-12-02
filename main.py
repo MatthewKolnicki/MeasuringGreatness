@@ -133,11 +133,13 @@ def compound_years_test(model, year, predictions):
 
 
 if __name__ == '__main__':
+    #Definition for Linear Models
     ridge = Ridge(alpha=.1)
     las = Lasso(alpha=.001)
     lin = LinearRegression()
     elas = ElasticNet(alpha=.1)
     sgd = SGDRegressor()
+    #Definition for
     rf = RandomForestRegressor(n_estimators=50, random_state=1, min_samples_split=5)
 
     years = list(range(1991, 2022))
