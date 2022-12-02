@@ -7,11 +7,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 # mvps
-mvps = pd.read_csv("mvps.csv")
+mvps = pd.read_csv("DataFiles/mvps.csv")
 mvps = mvps[["Player", "Year", "Pts Won", "Pts Max", "Share"]]
 
 # players
-players = pd.read_csv("players.csv")
+players = pd.read_csv("DataFiles/players.csv")
 # Makes sure cols are filled
 del players["Unnamed: 0"]
 # Dels Rank col why??
@@ -32,17 +32,13 @@ def single_team(df):
         return row
 
 
-#players = players.groupby(["Player", "Year"]).apply(single_team)
-
+players = players.groupby(["Player", "Year"]).apply(single_team)
 # Combines mvps and players dbs that match player and year cols
 combined = players.merge(mvps, how="outer", on=["Player", "Year"])
-
 # outputs combined db and only rows who have pts > num
 pts_check = combined[combined["Pts Won"] > 25]
-
+print (pts_check)
 mvp_stats = pd.read_csv("player_mvp_stats.csv")
-
-print (mvp_stats)
 
 # players.index = players.index.droplevel() #Will drop first row in db
 
