@@ -1,6 +1,7 @@
 # imports
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from tabulate import tabulate
 
 from sklearn.linear_model import Ridge
@@ -162,12 +163,31 @@ if __name__ == '__main__':
     # Makes values from df into lists
     model_list = df['Model'].tolist()
     values_list = df['Top 5 Accuracy | MVP Accuracy'].tolist()
-    print(model_list)
     new_val = []
     for values_list in values_list:
         values_list = values_list.replace(" ", "")
+        values_list = values_list.replace("%", "")
         new_val.append(values_list.split('|'))
-    print(new_val)
+
+    # Send values to respective list
+    top5_results = []
+    mvp_results = []
+    for temp in new_val:
+        top5_results.append(float(temp[0]))
+        mvp_results.append(float(temp[1]))
+
+    # Create bar graph including all model's top 5 MVP and MVP predictions
+    model_names = ['Ridge', 'Lasso', 'Linear', 'Elastic Net', 'SGD', 'Random Forest']
+    x_axis = np.arange(len(model_names))
+    plt.figure(figure_num)
+    plt.bar(x_axis + 0.2, top5_results, 0.4, label='Top 5 MVP ')
+    plt.bar(x_axis - 0.2, mvp_results, 0.4, label='MVP')
+    plt.xticks(x_axis, model_names)
+    plt.xlabel("Models")
+    plt.ylabel("Accuracy of Prediction (%) ")
+    plt.title("Model Predictions")
+    plt.legend()
+    plt.savefig("Results/MVPBarGraph.png")
 
     # Also creates graphs as popups
     plt.show()
