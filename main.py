@@ -15,6 +15,8 @@ mvp_stats = mvp_stats.fillna(0)
 del mvp_stats["Unnamed: 0"]
 mvp_stats["Player"] = mvp_stats["Player"].str.replace("*", "", regex=False)
 
+figure_num = 1
+
 # No strings, only numbers
 # Cannot use 'Pts Won', 'Pts Max', 'Share' because share is what we are trying to predict
 # pts won and pts max are too closly cooralated with share, share = pts won / pts max
@@ -95,10 +97,30 @@ def compound_years_test(model, year, predictions):
     #print("MVP hit or miss by year =", year_by_year_mvp)
     #print("MVP predicted accuracy per year", '%.4f' % mvp_compound, "%")
     #print("Top 5 accuracy by year =", year_by_year)
-    plt.scatter(years[5:], year_by_year)
+
+    str_model = str(model)
+    sep = str_model.split("(", 1)
+    str_model = sep[0]
+    global figure_num
+    plt.figure(figure_num)
+    plt.scatter(years[5:], year_by_year, c='blue', edgecolors='black', linewidths=1, alpha=0.7)
+    #plt.xticks(years[5:])
+    plt.xlabel("Years")
+    plt.ylabel("Accuracy of Top 5 MVP Prediction")
+    plt.title(str_model + ": Top 5 MVP Prediction")
     plt.savefig("DataFiles/" + str(model) + ".png")
-    plt.scatter(years[5:], year_by_year_mvp)
+
+    figure_num = figure_num + 1
+
+    plt.figure(figure_num)
+    plt.scatter(years[5:], year_by_year_mvp, c='red', edgecolors='black', linewidths=1, alpha=0.7)
+    #plt.xticks(years[5:])
+    plt.xlabel("Years")
+    plt.ylabel("Accuracy MVP Prediction")
+    plt.title(str_model + ": MVP Prediction")
     plt.savefig("DataFiles/" + str(model) + "_MVP.png")
+
+    figure_num = figure_num + 1
 
     return'%.3f' % top5_compound + "%        |    " + '%.3f' % mvp_compound + "%"
 
@@ -119,14 +141,14 @@ if __name__ == '__main__':
     # First 5 years are training first test set (1996), next is 6, then 7, ect.
 
 
-    #plt.show()
     data = {'Model': ['Ridge', 'Lasso', 'Linear', 'Elastic Net', 'SGD', 'Random Forest'],
-            'Top 5 Accuracy | MVP Accuracy': [compound_years_test(ridge, years[5:], regression(ridge)),
-                               compound_years_test(las, years[5:], regression(las)),
+            'Top 5 Accuracy | MVP Accuracy': [y := compound_years_test(ridge, years[5:], regression(ridge)),
+                               h := compound_years_test(las, years[5:], regression(las)),
                                compound_years_test(lin, years[5:], regression(lin)),
                                compound_years_test(elas, years[5:], regression(elas)),
                                compound_years_test(sgd, years[5:], regression(sgd)),
                                compound_years_test(rf, years[5:], regression(rf))],
             }
+    plt.show()
     df = pd.DataFrame(data)
     print((tabulate(df, headers='keys', tablefmt='psql')))
