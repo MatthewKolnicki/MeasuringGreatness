@@ -16,9 +16,9 @@ The pinnacle of basketball performance is measured in two ways, winning the NBA 
 
 #####  ***The program's code is written completely in Python; A Python Environment will be neccessary to run the program.***
 
-Donwload zip file "name.zip" from Canvas. Unzip "name.zip" within python environment.
+Donwload zip file "MeasuringGreatness.zip" from Canvas. Unzip "MeasuringGreatness.zip" within python environment.
 
-#### Included Files in "name.zip":
+#### Included Files in "MeasuringGreatness.zip":
 1) DataFiles/mvps.csv
 
 2) DataFiles/players.csv
