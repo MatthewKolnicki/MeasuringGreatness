@@ -86,7 +86,7 @@ PNG files will be created or overwritten inside of folder "Results/" containing 
 
 **Matthew Kolnicki** : https://github.com/MatthewKolnicki
 
-**Cold Warren** : https://github.com/ColeWarren
+**Cole Warren** : https://github.com/ColeWarren
 
 
 
